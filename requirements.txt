@@ -1,5 +1,5 @@
 pyrogram
 yt-dlp
 python-dotenv
-tgcrypto
 flask
+tgcrypto

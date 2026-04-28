@@ -5,23 +5,24 @@ import yt_dlp
 from pyrogram import Client, filters, enums
 from dotenv import load_dotenv
 
-# 1. FLASK QISMI (Render o'chirib qo'ymasligi uchun)
+# 1. RENDER UCHUN SOXTA VEB-SERVER (PORT OCHISH)
 server = Flask('')
 
 @server.route('/')
 def home():
-    return "Bot is alive!"
+    return "Bot is alive! 🚀"
 
 def run_server():
-    # Bu yerda portni Render avtomatik beradigan portga moslaymiz
+    # Render avtomatik beradigan PORT-ni olamiz yoki 8080 ishlatamiz
     port = int(os.environ.get("PORT", 8080))
     server.run(host='0.0.0.0', port=port)
 
 def keep_alive():
     t = Thread(target=run_server)
+    t.daemon = True # Bot o'chganda bu ham o'chishi uchun
     t.start()
 
-# 2. BOT QISMI
+# 2. BOTNI SOZLASH
 load_dotenv()
 
 app = Client(
@@ -76,14 +77,14 @@ async def download_video(client, message):
             os.remove(file_name)
 
     except Exception as e:
-        error_msg = str(e)
-        print(f"TERMINAL XATOSI: {error_msg}")
-        await status_msg.edit(f"Xatolik: {error_msg[:100]}")
+        print(f"XATOLIK: {str(e)}")
+        await status_msg.edit(f"Xatolik yuz berdi. (Instagram story bo'lsa login talab qilinishi mumkin)")
         if os.path.exists(file_name):
             os.remove(file_name)
 
-# 3. ISHGA TUSHIRISH
+# 3. ASOSIY ISHGA TUSHIRISH QISMI
 if __name__ == "__main__":
-    print("Bot qayta ishga tushdi! 🔥")
-    keep_alive()  # Soxta serverni yurgizish
-    app.run()     # Botni yurgizish
+    print("Server port ochmoqda...")
+    keep_alive() # Flask-ni fonda ishga tushiramiz
+    print("Bot ishga tushdi! 🔥")
+    app.run() # Botni ishga tushiramiz
